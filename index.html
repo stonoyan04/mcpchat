@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCP Chat</title>
+  <link rel="stylesheet" href="/src/styles.css">
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <h1 class="title">MCP Chat</h1>
+      <div class="mode-toggle">
+        <button class="mode-btn active" data-mode="contrarian">
+          <span class="icon">⚡</span>
+          <span>Contrarian</span>
+        </button>
+        <button class="mode-btn" data-mode="agreeable">
+          <span class="icon">💫</span>
+          <span>Agreeable</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="chat-container">
+      <div class="messages" id="messages"></div>
+    </div>
+
+    <form class="input-form" id="chatForm">
+      <input
+        type="text"
+        class="message-input"
+        id="messageInput"
+        placeholder="Type your message..."
+        autocomplete="off"
+        required
+      />
+      <button type="submit" class="send-btn">
+        <span>Send</span>
+        <span class="icon">→</span>
+      </button>
+    </form>
+  </div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

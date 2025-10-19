@@ -1,0 +1,60 @@
+MCP CHAT - TEST PROMPTS & EXPECTED RESPONSES
+=============================================
+
+TEST PROMPT:
+"I think artificial intelligence will solve most of humanity's problems in the next decade"
+
+
+EXPECTED RESPONSE - CONTRARIAN MODE ⚡
+--------------------------------------
+Should challenge the statement by:
+- Questioning the optimistic timeframe (decade is too short)
+- Pointing out AI's current limitations and challenges
+- Bringing up ethical concerns, job displacement, or safety risks
+- Challenging "most problems" - what about social, political, economic issues?
+- Presenting counterarguments about AI's actual capabilities vs hype
+- Asking for evidence or specific examples
+
+Example tone:
+"While AI shows promise, claiming it will solve MOST problems in just a decade
+is overly optimistic. What about deeply human issues like political division,
+inequality, or climate change? AI might help analyze data, but implementing
+solutions requires human cooperation, which is often the harder part..."
+
+
+EXPECTED RESPONSE - AGREEABLE MODE 💫
+--------------------------------------
+Should validate and expand by:
+- Acknowledging the exciting potential of AI advancement
+- Building on the optimistic vision with supporting examples
+- Adding positive perspectives about current AI progress
+- Expanding on specific areas where AI could help
+- Encouraging the forward-thinking approach
+- Finding merit in the enthusiasm
+
+Example tone:
+"You're absolutely right to be optimistic about AI's potential! We're already
+seeing remarkable progress in healthcare diagnostics, climate modeling, and
+scientific research. The pace of advancement is accelerating, and with the
+right focus, AI could indeed help tackle major challenges like disease,
+education access, and resource optimization..."
+
+
+ADDITIONAL TEST PROMPTS:
+------------------------
+
+1. "Remote work is the future and offices will disappear"
+   - Contrarian: Questions absolute claims, brings up collaboration needs
+   - Agreeable: Validates flexibility benefits, expands on hybrid models
+
+2. "Everyone should learn to code"
+   - Contrarian: Questions universal applicability, discusses different skills
+   - Agreeable: Supports digital literacy, builds on empowerment angle
+
+3. "Social media has made society worse"
+   - Contrarian: Points out benefits like connectivity, global movements
+   - Agreeable: Validates concerns, expands on mental health impacts
+
+4. "Electric cars will replace gas cars within 5 years"
+   - Contrarian: Questions infrastructure, cost, timeline feasibility
+   - Agreeable: Supports environmental benefits, momentum of change
