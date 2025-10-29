@@ -1,24 +1,51 @@
 {
   "name": "mcpchat",
   "version": "1.0.0",
+  "description": "Dual-personality chat interface powered by Claude AI with contrarian and agreeable modes",
   "type": "module",
   "scripts": {
     "dev": "concurrently \"npm run api\" \"npm run client\"",
     "api": "node --loader ts-node/esm server/api.ts",
     "mcp": "node --loader ts-node/esm server/index.ts",
     "client": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "build": "npm run build:client && npm run build:server",
+    "build:client": "vite build",
+    "build:server": "tsc --project tsconfig.server.json",
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint . --ext .ts --max-warnings 0",
+    "lint:fix": "eslint . --ext .ts --fix",
+    "format": "prettier --write \"**/*.{ts,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,json,md}\"",
+    "validate": "npm run type-check && npm run lint && npm run format:check"
   },
+  "keywords": [
+    "chat",
+    "ai",
+    "claude",
+    "mcp",
+    "typescript"
+  ],
+  "author": "",
+  "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.4",
     "dotenv": "^17.2.3"
   },
   "devDependencies": {
     "@types/node": "^22.10.5",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
     "concurrently": "^9.1.2",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2",
     "vite": "^6.0.7"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
   }
 }

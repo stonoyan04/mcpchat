@@ -1,23 +1,24 @@
+/**
+ * MCP (Model Context Protocol) Server for MCP Chat
+ * Provides tools for contrarian and agreeable conversation modes
+ */
+
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import {
-  CallToolRequestSchema,
-  ListToolsRequestSchema,
-  Tool,
-} from '@modelcontextprotocol/sdk/types.js';
+import type { Tool } from '@modelcontextprotocol/sdk/types.js';
+import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
+import { Mode } from '../shared/enums/index.js';
+import { SYSTEM_PROMPTS, MODE_CONFIG } from '../shared/constants/index.js';
+import { isNonEmptyString } from '../shared/utils/validation.js';
+import { logger } from '../shared/utils/logger.js';
 
-const CONTRARIAN_PROMPT = `You are a sharp, critical thinker who challenges every statement with logical counterarguments.
-Your role is to find flaws, present alternative perspectives, and question assumptions.
-Be intellectually rigorous but respectful. Focus on constructive disagreement that helps people think deeper.`;
-
-const AGREEABLE_PROMPT = `You are a warm, supportive conversationalist who validates and builds upon what people say.
-Your role is to find merit in their ideas, offer encouragement, and expand on their thoughts positively.
-Be genuine and thoughtful in your agreement, adding value rather than just echoing.`;
-
+/**
+ * Define MCP tools for different conversation modes
+ */
 const tools: Tool[] = [
   {
-    name: 'contrarian_mode',
-    description: 'Engage in critical thinking mode - challenges and questions the input',
+    name: MODE_CONFIG[Mode.CONTRARIAN].name,
+    description: MODE_CONFIG[Mode.CONTRARIAN].description,
     inputSchema: {
       type: 'object',
       properties: {
@@ -30,8 +31,8 @@ const tools: Tool[] = [
     },
   },
   {
-    name: 'agreeable_mode',
-    description: 'Engage in supportive mode - validates and builds upon the input',
+    name: MODE_CONFIG[Mode.AGREEABLE].name,
+    description: MODE_CONFIG[Mode.AGREEABLE].description,
     inputSchema: {
       type: 'object',
       properties: {
@@ -45,59 +46,92 @@ const tools: Tool[] = [
   },
 ];
 
-const server = new Server(
-  {
-    name: 'mcpchat',
-    version: '1.0.0',
-  },
-  {
-    capabilities: {
-      tools: {},
+/**
+ * Initialize MCP server
+ */
+function createMCPServer(): Server {
+  const server = new Server(
+    {
+      name: 'mcpchat',
+      version: '1.0.0',
     },
-  }
-);
+    {
+      capabilities: {
+        tools: {},
+      },
+    }
+  );
 
-server.setRequestHandler(ListToolsRequestSchema, async () => ({
-  tools,
-}));
+  // Handle tool listing requests
+  server.setRequestHandler(ListToolsRequestSchema, () => {
+    logger.debug('Received tools list request');
+    return { tools };
+  });
 
-server.setRequestHandler(CallToolRequestSchema, async (request) => {
-  const { name, arguments: args } = request.params;
+  // Handle tool execution requests
+  server.setRequestHandler(CallToolRequestSchema, (request) => {
+    const { name, arguments: args } = request.params;
+    logger.debug('Received tool call request', { tool: name });
 
-  if (name === 'contrarian_mode') {
-    const message = (args as { message: string }).message;
-    return {
-      content: [
-        {
-          type: 'text',
-          text: `${CONTRARIAN_PROMPT}\n\nUser statement: "${message}"\n\nProvide a thoughtful counterargument or alternative perspective.`,
-        },
-      ],
-    };
-  }
+    // Validate arguments
+    const message = (args as { message?: string })?.message;
+    if (!isNonEmptyString(message)) {
+      throw new Error('Invalid message: must be a non-empty string');
+    }
 
-  if (name === 'agreeable_mode') {
-    const message = (args as { message: string }).message;
-    return {
-      content: [
-        {
-          type: 'text',
-          text: `${AGREEABLE_PROMPT}\n\nUser statement: "${message}"\n\nProvide supportive validation and build upon this idea.`,
-        },
-      ],
-    };
-  }
+    // Handle contrarian mode
+    if (name === (Mode.CONTRARIAN as string)) {
+      return {
+        content: [
+          {
+            type: 'text',
+            text: `${SYSTEM_PROMPTS[Mode.CONTRARIAN]}\n\nUser statement: "${message}"\n\nProvide a thoughtful counterargument or alternative perspective.`,
+          },
+        ],
+      };
+    }
 
-  throw new Error(`Unknown tool: ${name}`);
-});
+    // Handle agreeable mode
+    if (name === (Mode.AGREEABLE as string)) {
+      return {
+        content: [
+          {
+            type: 'text',
+            text: `${SYSTEM_PROMPTS[Mode.AGREEABLE]}\n\nUser statement: "${message}"\n\nProvide supportive validation and build upon this idea.`,
+          },
+        ],
+      };
+    }
 
-async function main() {
-  const transport = new StdioServerTransport();
-  await server.connect(transport);
-  console.error('MCP Chat server running on stdio');
+    throw new Error(`Unknown tool: ${name}`);
+  });
+
+  return server;
 }
 
-main().catch((error) => {
-  console.error('Server error:', error);
+/**
+ * Start the MCP server
+ */
+async function startMCPServer(): Promise<void> {
+  try {
+    const server = createMCPServer();
+    const transport = new StdioServerTransport();
+
+    await server.connect(transport);
+
+    logger.info('MCP Chat server running on stdio');
+    logger.debug(
+      'Available tools:',
+      tools.map((t) => t.name)
+    );
+  } catch (error) {
+    logger.error('Failed to start MCP server', error);
+    process.exit(1);
+  }
+}
+
+// Start the server
+startMCPServer().catch((error) => {
+  logger.error('Unhandled error in MCP server', error);
   process.exit(1);
 });
