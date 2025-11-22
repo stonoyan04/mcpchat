@@ -16,7 +16,7 @@ export function isNonEmptyString(value: unknown): value is string {
  * Validate that a value is a valid Mode
  */
 export function isValidMode(value: unknown): value is Mode {
-  return value === Mode.CONTRARIAN || value === Mode.AGREEABLE;
+  return value === Mode.CONTRARIAN || value === Mode.AGREEABLE || value === Mode.DEBATE;
 }
 
 /**

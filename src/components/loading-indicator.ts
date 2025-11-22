@@ -14,11 +14,11 @@ export class LoadingIndicator {
   /**
    * Show loading indicator
    */
-  show(mode: Mode): void {
+  show(mode: Mode, speaker?: 'AI-1' | 'AI-2'): void {
     // Remove existing loading indicator if any
     this.hide();
 
-    const loadingEl = this.createLoadingElement(mode);
+    const loadingEl = this.createLoadingElement(mode, speaker);
     this.messagesContainer.appendChild(loadingEl);
     this.scrollToBottom();
   }
@@ -36,19 +36,41 @@ export class LoadingIndicator {
   /**
    * Create loading element
    */
-  private createLoadingElement(mode: Mode): HTMLDivElement {
+  private createLoadingElement(mode: Mode, speaker?: 'AI-1' | 'AI-2'): HTMLDivElement {
     const loadingEl = document.createElement('div');
     loadingEl.id = this.loadingElementId;
-    loadingEl.className = `message ${MessageRole.ASSISTANT} ${mode}`;
 
-    const modeConfig = MODE_CONFIG[mode];
+    // Handle debate mode with speakers
+    if (speaker === 'AI-1') {
+      loadingEl.className = 'message assistant debate ai-1';
+    } else if (speaker === 'AI-2') {
+      loadingEl.className = 'message user debate ai-2';
+    } else {
+      loadingEl.className = `message ${MessageRole.ASSISTANT} ${mode}`;
+    }
 
     const label = document.createElement('div');
     label.className = 'message-label';
-    label.textContent = modeConfig.label;
+
+    if (speaker === 'AI-1') {
+      label.textContent = 'AI-1 (For)';
+    } else if (speaker === 'AI-2') {
+      label.textContent = 'AI-2 (Against)';
+    } else {
+      const modeConfig = MODE_CONFIG[mode];
+      label.textContent = modeConfig.label;
+    }
 
     const content = document.createElement('div');
     content.className = 'message-content loading';
+
+    // Add speaker-specific class for loading dots color
+    if (speaker === 'AI-2') {
+      content.classList.add('loading-ai-2');
+    } else if (speaker === 'AI-1') {
+      content.classList.add('loading-ai-1');
+    }
+
     content.innerHTML =
       '<div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div>';
 

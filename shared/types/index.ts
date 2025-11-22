@@ -2,9 +2,9 @@
  * Shared types used across frontend and backend
  */
 
-import { Mode, MessageRole } from '../enums/index.js';
+import { Mode, MessageRole, DebateStance } from '../enums/index.js';
 
-export { Mode, MessageRole };
+export { Mode, MessageRole, DebateStance };
 
 export interface Message {
   role: MessageRole;
@@ -16,6 +16,8 @@ export interface Message {
 export interface ChatRequest {
   message: string;
   mode: Mode;
+  topic?: string;
+  speaker?: string;
 }
 
 export interface ChatResponse {

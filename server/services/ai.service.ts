@@ -17,7 +17,7 @@ export class AIService {
   /**
    * Generate a response using the Anthropic API
    */
-  async generateResponse(message: string, mode: Mode): Promise<string> {
+  async generateResponse(message: string, mode: Mode, topic?: string, speaker?: string): Promise<string> {
     const sanitizedMessage = sanitizeInput(message);
 
     if (!sanitizedMessage) {
@@ -27,10 +27,13 @@ export class AIService {
     // Return mock response if API key is not configured
     if (!config.anthropicApiKey) {
       logger.warn('API key not configured, returning mock response');
-      return this.getMockResponse(mode);
+      return this.getMockResponse(mode, topic, speaker);
     }
 
     const systemPrompt = this.getSystemPrompt(mode);
+    const userMessage = mode === Mode.DEBATE && topic && speaker ?
+      `Topic: ${topic}\nCurrent Speaker: ${speaker}\n\nGenerate ONLY ${speaker}'s statement on this topic.` :
+      sanitizedMessage;
 
     try {
       logger.debug('Sending request to Anthropic API', {
@@ -52,7 +55,7 @@ export class AIService {
           messages: [
             {
               role: 'user',
-              content: sanitizedMessage,
+              content: userMessage,
             } as AnthropicMessage,
           ],
         }),
@@ -101,7 +104,14 @@ export class AIService {
   /**
    * Get a mock response when API key is not configured
    */
-  private getMockResponse(mode: Mode): string {
+  private getMockResponse(mode: Mode, topic?: string, speaker?: string): string {
+    if (mode === Mode.DEBATE && topic && speaker) {
+      if (speaker === 'AI-1') {
+        return `AI-1: I believe ${topic} has tremendous potential and could revolutionize how we approach this field. [Set ANTHROPIC_API_KEY to enable full AI-powered debates]`;
+      } else {
+        return `AI-2: While that sounds optimistic, we need to consider the significant risks and challenges that come with ${topic}. [Set ANTHROPIC_API_KEY to enable full AI-powered debates]`;
+      }
+    }
     return mode === Mode.CONTRARIAN
       ? `I'd challenge that assumption, but I'm not properly configured yet. Set ANTHROPIC_API_KEY to enable real AI responses.`
       : `I'd love to expand on that, but I need proper configuration first. Set ANTHROPIC_API_KEY to enable real AI responses.`;

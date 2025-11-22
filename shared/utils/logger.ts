@@ -12,7 +12,8 @@ class Logger {
 
   constructor(level: LogLevel = LogLevel.INFO) {
     this.level = level;
-    this.isServer = typeof window === 'undefined';
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    this.isServer = typeof (globalThis as any).window === 'undefined';
   }
 
   setLevel(level: LogLevel): void {

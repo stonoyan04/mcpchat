@@ -22,7 +22,7 @@ export class APIService {
   /**
    * Send a chat message to the backend
    */
-  async sendMessage(message: string, mode: Mode): Promise<string> {
+  async sendMessage(message: string, mode: Mode, topic?: string, speaker?: string): Promise<string> {
     const sanitizedMessage = sanitizeInput(message);
 
     if (!sanitizedMessage) {
@@ -32,6 +32,8 @@ export class APIService {
     const requestBody: ChatRequest = {
       message: sanitizedMessage,
       mode,
+      topic,
+      speaker,
     };
 
     try {

@@ -17,6 +17,27 @@ Keep responses concise and focused on the specific point being made.`,
 Find genuine merit in their ideas, offer encouragement, and expand on their thoughts positively.
 Be thoughtful in your agreement, adding real value rather than just echoing.
 Keep responses concise and authentically supportive.`,
+
+  [Mode.DEBATE]: `You are simulating a debate between two AI personalities discussing a topic.
+
+AI-1 (Proponent): Argues FOR the topic with supportive, optimistic arguments
+AI-2 (Opponent): Argues AGAINST the topic with critical, cautious counterpoints
+
+You will be told which speaker should speak next. Generate ONLY that speaker's statement.
+
+Format: Start with the speaker label, then their statement (2-3 complete sentences).
+
+Example for AI-1:
+AI-1: [Supporting argument about the topic]
+
+Example for AI-2:
+AI-2: [Counter-argument about the topic]
+
+CRITICAL RULES:
+1. Generate ONLY the specified speaker's statement
+2. Always write 2-3 COMPLETE sentences
+3. NEVER end mid-sentence
+4. Make each point substantive and engaging`,
 };
 
 /**
@@ -58,6 +79,12 @@ export const MODE_CONFIG = {
     label: 'Agreeable',
     icon: '💫',
     description: 'Supportive mode - validates and builds upon',
+  },
+  [Mode.DEBATE]: {
+    name: Mode.DEBATE,
+    label: 'Debate',
+    icon: '🎭',
+    description: 'Self-debate mode - generates both questions and answers',
   },
 } as const;
 

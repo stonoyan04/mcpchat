@@ -82,11 +82,11 @@ function handleChat(req: IncomingMessage, res: ServerResponse): void {
           return;
         }
 
-        const { message, mode } = data as ChatRequest;
-        logger.info('Processing chat request', { mode, messageLength: message.length });
+        const { message, mode, topic, speaker } = data as ChatRequest;
+        logger.info('Processing chat request', { mode, messageLength: message.length, topic, speaker });
 
         // Generate AI response
-        const response = await aiService.generateResponse(message, mode);
+        const response = await aiService.generateResponse(message, mode, topic, speaker);
 
         const successResponse: ChatResponse = { response };
         sendJSON(res, HTTP_STATUS.OK, successResponse);

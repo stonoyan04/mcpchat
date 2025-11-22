@@ -19,11 +19,36 @@
           <span class="icon">💫</span>
           <span>Agreeable</span>
         </button>
+        <button class="mode-btn" data-mode="debate">
+          <span class="icon">🎭</span>
+          <span>Debate</span>
+        </button>
       </div>
     </header>
 
     <div class="chat-container">
       <div class="messages" id="messages"></div>
+    </div>
+
+    <div class="debate-controls" id="debateControls" style="display: none;">
+      <div class="debate-topic-group">
+        <label for="debateTopic">Topic:</label>
+        <input
+          type="text"
+          id="debateTopic"
+          class="debate-topic-input"
+          placeholder="Enter a debate topic (e.g., 'artificial intelligence in education')..."
+          autocomplete="off"
+        />
+      </div>
+      <button type="button" class="start-debate-btn" id="startDebateBtn">
+        <span>Start Debate</span>
+        <span class="icon">🎭</span>
+      </button>
+      <button type="button" class="stop-debate-btn" id="stopDebateBtn" style="display: none;">
+        <span>Stop</span>
+        <span class="icon">⏹</span>
+      </button>
     </div>
 
     <form class="input-form" id="chatForm">

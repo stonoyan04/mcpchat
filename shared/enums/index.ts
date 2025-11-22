@@ -8,6 +8,7 @@
 export enum Mode {
   CONTRARIAN = 'contrarian',
   AGREEABLE = 'agreeable',
+  DEBATE = 'debate',
 }
 
 /**
@@ -16,6 +17,14 @@ export enum Mode {
 export enum MessageRole {
   USER = 'user',
   ASSISTANT = 'assistant',
+}
+
+/**
+ * Debate stance
+ */
+export enum DebateStance {
+  FOR = 'for',
+  AGAINST = 'against',
 }
 
 /**
